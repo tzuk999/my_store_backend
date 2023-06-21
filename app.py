@@ -65,7 +65,7 @@ def add_product(id=-1):
             db.session.add(product)
             db.session.commit()
         else:
-            product = Product.query.get(id)
+            product = db.session.query(Product).get(id)
             product = Product(name=name, price=price,
                             image=image, category=category, stock=stock)
             db.session.commit()
