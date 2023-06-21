@@ -66,8 +66,12 @@ def add_product(id=-1):
             db.session.commit()
         else:
             product = db.session.query(Product).get(id)
-            product = Product(name=name, price=price,
-                            image=image, category=category, stock=stock)
+            if product:
+                product.name = name
+                product.price = price
+                product.image = image
+                product.category = category
+                product.stock = stock
             db.session.commit()
         response = {'message': 'POST request received successfully'}    
         return jsonify(response)
