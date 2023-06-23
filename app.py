@@ -76,7 +76,7 @@ def add_product(id=-1):
         response = {'message': 'POST request received successfully'}    
         return jsonify(response)
     else:
-        product = Product.query.get(id)
+        product = db.session.query(Product).get(id)
         response = {
             'id': product.id,
                 'name': product.name,
@@ -85,6 +85,7 @@ def add_product(id=-1):
                 'category': product.category,
                 'stock': product.stock 
         }
+        db.session.commit()
         print(f"*******{response}*******")
         return jsonify(response)
     
@@ -92,7 +93,7 @@ def add_product(id=-1):
 
 @app.route("/delete_product/<id>", methods=["DELETE"])
 def delete_product(id):
-    product = Product.query.get(id)
+    product = db.session.query(Product).get(id)
     if product:
         db.session.delete(product)
         db.session.commit()
