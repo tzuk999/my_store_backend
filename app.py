@@ -49,45 +49,33 @@ def product(id=-1):
 
 
 @app.route("/add_product", methods=["POST"])
-@app.route("/add_product/<id>", methods=["POST","GET"])
+@app.route("/add_product/<id>", methods=["PUT"])
 def add_product(id=-1):
-    if request.method == "POST":
-        name = request.get_json().get("name")
-        price = request.get_json().get("price")
-        image = request.get_json().get("image")
-        category = request.get_json().get("category")
-        stock = request.get_json().get("stock")
-        print(f"!!! {name},{price},{image},{category},{stock}")
-        # add new product
-        if id == -1:
-            product = Product(name=name, price=price,
-                              image=image, category=category, stock=stock)
-            db.session.add(product)
-            db.session.commit()
-        else:
-            product = db.session.query(Product).get(id)
-            if product:
-                product.name = name
-                product.price = price
-                product.image = image
-                product.category = category
-                product.stock = stock
-            db.session.commit()
-        response = {'message': 'POST request received successfully'}    
-        return jsonify(response)
+
+    name = request.get_json().get("name")
+    price = request.get_json().get("price")
+    image = request.get_json().get("image")
+    category = request.get_json().get("category")
+    stock = request.get_json().get("stock")
+    print(f"!!! {name},{price},{image},{category},{stock}")
+    # add new product
+    if id == -1:
+        product = Product(name=name, price=price,
+                            image=image, category=category, stock=stock)
+        db.session.add(product)
+        db.session.commit()
     else:
         product = db.session.query(Product).get(id)
-        response = {
-            'id': product.id,
-                'name': product.name,
-                'price': product.price,
-                'image': product.image,
-                'category': product.category,
-                'stock': product.stock 
-        }
+        if product:
+            product.name = name
+            product.price = price
+            product.image = image
+            product.category = category
+            product.stock = stock
         db.session.commit()
-        print(f"*******{response}*******")
-        return jsonify(response)
+    response = {'message': 'POST request received successfully'}    
+    return jsonify(response)
+
     
 
 
